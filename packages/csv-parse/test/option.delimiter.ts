@@ -1,5 +1,5 @@
 import "should";
-import { parse } from "../lib/index.js";
+import { parse, normalize_options } from "../lib/index.js";
 
 describe("Option `delimiter`", function () {
   it("validation", function () {
@@ -57,6 +57,11 @@ describe("Option `delimiter`", function () {
       parser.write(c);
     }
     parser.end();
+  });
+
+  it("default to comma", function () {
+    const options = normalize_options({});
+    options.delimiter.should.eql([Buffer.from(",")]);
   });
 
   it("using default comma", function (next) {
