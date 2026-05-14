@@ -77,7 +77,11 @@ const init_state = function (options) {
       // Skip if the remaining buffer smaller than comment
       options.comment !== null ? options.comment.length : 0,
       // Skip if the remaining buffer can be delimiter
-      ...options.delimiter.map((delimiter) => delimiter.length),
+      ...(options.delimiter
+        ? options.delimiter.map((delimiter) => delimiter.length)
+        : []),
+      // Auto discovery of delimiter is limited to 1 character
+      options.delimiter_auto ? 1 : 0,
       // Skip if the remaining buffer can be escape sequence
       options.quote !== null ? options.quote.length : 0,
       // Skip if the remaining buffer can be a multi-byte trim character

@@ -763,6 +763,10 @@ const transform = function (original_options = {}) {
     },
     __isDelimiter: function (buf, pos, chr) {
       const { delimiter, ignore_last_delimiters } = this.options;
+      // Auto discovery is enabled and no delimiter is found yet
+      // if (this.delimiter === undefined) {
+      //   return 0;
+      // }
       if (
         ignore_last_delimiters === true &&
         this.state.record.length === this.options.columns.length - 1

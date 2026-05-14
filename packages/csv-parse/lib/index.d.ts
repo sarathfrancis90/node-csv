@@ -144,6 +144,10 @@ export interface OptionsNormalized<T = string[], U = T> {
    */
   delimiter: Buffer[];
   /**
+   * Discover the field delimiter.
+   */
+  delimiter_auto: boolean;
+  /**
    * Set the source and destination encoding, a value of `null` returns buffer instead of strings.
    */
   encoding: BufferEncoding | null;
@@ -318,6 +322,10 @@ export interface Options<T = string[], U = T> {
    * Set the field delimiter. One character only, defaults to comma.
    */
   delimiter?: OptionsNormalized["delimiter"] | string | string[] | Buffer;
+  /**
+   * Discover the field delimiter
+   */
+  delimiter_auto?: OptionsNormalized["delimiter_auto"];
   /**
    * Set the source and destination encoding, a value of `null` returns buffer instead of strings.
    */

@@ -190,29 +190,14 @@ const normalize_options = function (opts) {
       options,
     );
   }
+  // Normalize option `delimiter_auto`
+  options.delimiter_auto = !!options.delimiter_auto;
   // Normalize option `delimiter`
   const delimiter_json = JSON.stringify(options.delimiter);
-  if (!Array.isArray(options.delimiter))
-    options.delimiter = [options.delimiter];
-  if (options.delimiter.length === 0) {
-    throw new CsvError(
-      "CSV_INVALID_OPTION_DELIMITER",
-      [
-        "Invalid option delimiter:",
-        "delimiter must be a non empty string or buffer or array of string|buffer,",
-        `got ${delimiter_json}`,
-      ],
-      options,
-    );
-  }
-  options.delimiter = options.delimiter.map(function (delimiter) {
-    if (delimiter === undefined || delimiter === null || delimiter === false) {
-      return Buffer.from(",", options.encoding);
-    }
-    if (typeof delimiter === "string") {
-      delimiter = Buffer.from(delimiter, options.encoding);
-    }
-    if (!Buffer.isBuffer(delimiter) || delimiter.length === 0) {
+  if (options.delimiter_auto == false) {
+    if (!Array.isArray(options.delimiter))
+      options.delimiter = [options.delimiter];
+    if (options.delimiter.length === 0) {
       throw new CsvError(
         "CSV_INVALID_OPTION_DELIMITER",
         [
@@ -223,8 +208,31 @@ const normalize_options = function (opts) {
         options,
       );
     }
-    return delimiter;
-  });
+    options.delimiter = options.delimiter.map(function (delimiter) {
+      if (
+        delimiter === undefined ||
+        delimiter === null ||
+        delimiter === false
+      ) {
+        return Buffer.from(",", options.encoding);
+      }
+      if (typeof delimiter === "string") {
+        delimiter = Buffer.from(delimiter, options.encoding);
+      }
+      if (!Buffer.isBuffer(delimiter) || delimiter.length === 0) {
+        throw new CsvError(
+          "CSV_INVALID_OPTION_DELIMITER",
+          [
+            "Invalid option delimiter:",
+            "delimiter must be a non empty string or buffer or array of string|buffer,",
+            `got ${delimiter_json}`,
+          ],
+          options,
+        );
+      }
+      return delimiter;
+    });
+  }
   // Normalize option `escape`
   if (options.escape === undefined || options.escape === true) {
     options.escape = Buffer.from('"', options.encoding);
